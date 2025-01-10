@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
+path=$(dirname $(realpath "$0"))
 processID=$(echo $$)
-file="./selection-$(echo $processID)"
+file="/tmp/selection-$(echo $processID)"
 
-FILE="$file" node ./dist/root.js "$@">/dev/tty
+FILE="$file" node "${path}/dist/root.js" "$@">/dev/tty
 
 exitStatus="$?"
 
