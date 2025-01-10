@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import {
     Box,
-    KeyMap,
     List,
     preserveScreen,
     setMouseReporting,

@@ -5,7 +5,10 @@ file="./selection-$(echo $processID)"
 
 FILE="$file" node ./dist/root.js "$@">/dev/tty
 
-if [[ -f "$file" ]]; then
-    cat "$file" && rm "$file"
-fi
+exitStatus="$?"
 
+if [[ -f "$file" ]]; then
+    cat "$file" && rm "$file" && exit "$exitStatus"
+else
+    echo "" && exit 1
+fi
