@@ -15,11 +15,6 @@ import fs from "node:fs/promises";
 import { args } from "./parseArgs.js";
 import { randomUUID } from "node:crypto";
 
-if (args.viewport) {
-    preserveScreen();
-    setMouseReporting(true);
-}
-
 const LIST = args._.map((arg) => {
     return { id: randomUUID(), value: arg, checked: false };
 });
@@ -27,6 +22,14 @@ const FILE = process.env.FILE!;
 
 if (!LIST.length) {
     process.exit();
+}
+
+if (
+    args.viewport ||
+    (LIST.length >= process.stdout.rows && args.maximumWindow)
+) {
+    preserveScreen();
+    setMouseReporting(true);
 }
 
 export default function App(): React.ReactNode {
@@ -47,7 +50,7 @@ export default function App(): React.ReactNode {
     });
 
     const progress = `${control.currentIndex + 1}/${items.length}`;
-    const height =
+    let height =
         Math.min(LIST.length, args.windowSize, process.stdout.rows) +
         (args.borderStyle && process.stdout.rows > 2
             ? 2
@@ -56,6 +59,10 @@ export default function App(): React.ReactNode {
                   ? 1
                   : 0
               : 0);
+
+    if (args.maximumWindow) {
+        height = Math.min(LIST.length, process.stdout.rows);
+    }
 
     const content = (
         <Box marginLeft={args.indentBorder ? args.indent : 0}>

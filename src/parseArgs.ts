@@ -48,7 +48,7 @@ export const args = yargs(hideBin(process.argv))
         requiresArg: true,
     })
     .option("blurColor", {
-        describe: "Same as focusColor, but for non focused list items",
+        describe: "Same as focusColor, but for blurred menu items",
         type: "string",
         default: "",
         requiresArg: true,
@@ -79,7 +79,7 @@ export const args = yargs(hideBin(process.argv))
     })
     .option("selection", {
         describe:
-            "If 'single', enter key chooses focused item.  If 'many' spacebar checks one or more item and enter key returns all checked",
+            "If 'single', enter key chooses focused item.  If 'many' spacebar checks one or more items and enter chooses all checked",
         type: "string",
         choices: ["single", "many"],
         default: "single",
