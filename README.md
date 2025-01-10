@@ -83,18 +83,6 @@ check for captured output with something like this:
 
 ```
 
-Imagine your script has multiple calls to *js-select*.  If you SIGINT during the
-first one, that only kills the process that spawned the menu, and your
-subsequent menus will still spawn unless you end the script, which would be
-quite annoying.
-
-
-
-
-
-
-
-
-
-
-
+If the user sends a SIGINT during a menu, this ensures your script doesn't
+continue running additional menus, which would be frustrating if your intention
+was to exit the script.
