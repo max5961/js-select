@@ -7,6 +7,10 @@ alternative to the built in *select* bash command.  Written in TypeScript with
 [tuir](https://github.com/max5961/tuir).  Comes with vi keybindings by default
 and allows for a reasonable amount of other customizations.
 
+<!-- demo -->
+https://github.com/user-attachments/assets/3d6d632c-b947-4d5a-b1bf-03df6d668009
+
+
 ### Install
 
 ```sh
