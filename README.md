@@ -12,6 +12,11 @@ and allows for a reasonable amount of other customizations.
 ```sh
 sudo npm install -g @mmorrissey5961/js-select
 ```
+or
+```sh
+git clone https://github.com/max5961/js-select
+cd js-select && npm install && npm run deploy
+```
 
 ### Usage
 ```
