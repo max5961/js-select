@@ -1,7 +1,9 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
     Box,
+    KeyMap,
     List,
+    preserveScreen,
     Text,
     useApp,
     useKeymap,
@@ -10,54 +12,74 @@ import {
     Viewport,
 } from "tuir";
 import fs from "node:fs/promises";
+import { args } from "./parseArgs.js";
+import { randomUUID } from "node:crypto";
 
-type Props = {
-    FILE: string;
-    list: string[];
-    color?: string;
-    selectedIndex?: number;
-    selectedName?: string;
-    border?: boolean;
-    viewport?: boolean;
-};
+if (args.viewport) {
+    preserveScreen();
+}
 
-export default function App(props: Props): React.ReactNode {
+const LIST = args._.map((arg) => {
+    return { id: randomUUID(), value: arg, checked: false };
+});
+const FILE = process.env.FILE!;
+
+if (!LIST.length) {
+    process.exit();
+}
+
+export default function App(): React.ReactNode {
+    // Get start index
     const startIndex = useMemo<number>(() => {
-        if (props.selectedIndex !== undefined) return props.selectedIndex;
-        if (props.selectedName) {
-            return props.list.findIndex((name) => name === props.selectedName);
+        if (args.preSelectedIndex !== undefined) return args.preSelectedIndex;
+        if (args.preSelectedName) {
+            return LIST.findIndex((arg) => arg.value === args.preSelectedName);
         }
         return 0;
     }, []);
 
-    const { listView, items, control } = useList(props.list, {
-        centerScroll: true,
+    const { listView, items, control } = useList(LIST, {
         startIndex: startIndex,
+        centerScroll: args.centerScroll,
+        fallthrough: args.fallthrough,
+        navigation: args.navigation === "vi" ? "vi-vertical" : "arrow-vertical",
     });
 
-    const count = `${control.currentIndex + 1}/${items.length}`;
+    const progress = `${control.currentIndex + 1}/${items.length}`;
+    const height =
+        Math.min(LIST.length, args.windowSize, process.stdout.rows) +
+        (args.borderStyle && process.stdout.rows > 2
+            ? 2
+            : args.displayProgress
+              ? process.stdout.rows > 1
+                  ? 1
+                  : 0
+              : 0);
 
     const content = (
-        <Box
-            height={Math.min(
-                7,
-                items.length + (props.border ? 2 : 0),
-                process.stdout.rows,
-            )}
-            borderStyle={props.border ? "round" : undefined}
-            titleTopLeft={{ title: props.border ? count : "" }}
-        >
-            <List listView={listView} scrollbar={{ hide: true }}>
-                {items.map((_, idx) => {
-                    return (
-                        <Item key={idx} startIndex={startIndex} {...props} />
-                    );
-                })}
-            </List>
+        <Box marginLeft={args.indentBorder ? args.indent : 0}>
+            <Box
+                height={height}
+                borderStyle={args.borderStyle}
+                borderColor={args.borderColor}
+                titleTopLeft={{
+                    title: args.displayProgress ? progress : "",
+                    color: args.progressColor,
+                    italic: args.italicProgress,
+                    dimColor: args.dimProgress,
+                    bold: args.boldProgress,
+                }}
+            >
+                <List listView={listView} scrollbar={{ hide: true }}>
+                    {items.map((item) => {
+                        return <Item key={item.id} startIndex={startIndex} />;
+                    })}
+                </List>
+            </Box>
         </Box>
     );
 
-    if (props.viewport) {
+    if (args.viewport) {
         return (
             <Viewport
                 justifyContent="center"
@@ -76,25 +98,74 @@ export default function App(props: Props): React.ReactNode {
     return content;
 }
 
-function Item(props: Props & { startIndex: number }): React.ReactNode {
+type Props = {
+    startIndex: number;
+};
+
+function Item({ startIndex }: Props): React.ReactNode {
     const { exit } = useApp();
-    const { isFocus, item, index } = useListItem();
+    const { isFocus, item, items, setItems, index } =
+        useListItem<typeof LIST>();
 
-    let textContent = `   ${isFocus ? "> " : "  "}${item}`;
-    const color = isFocus ? props.color : undefined;
-
-    if (props.selectedName || props.selectedIndex !== undefined) {
-        if (props.startIndex === index) {
-            textContent += " ✔";
+    useEffect(() => {
+        if (args.preSelectedName || args.preSelectedIndex !== undefined) {
+            if (startIndex === index) {
+                const copy = items.slice();
+                copy[index] = { ...item, checked: true };
+                setItems(copy);
+            }
         }
+    }, []);
+
+    const keymap: KeyMap = {};
+    keymap["choose"] = { key: "return" };
+    if (args.selection === "many") {
+        keymap["check"] = { input: " " };
     }
 
-    const { useEvent } = useKeymap({ choose: { key: "return" } });
+    const { useEvent } = useKeymap(keymap);
 
     useEvent("choose", async () => {
-        await fs.writeFile(props.FILE, item, { encoding: "utf-8" });
+        if (args.selection === "single") {
+            await fs.writeFile(FILE, item.value, { encoding: "utf-8" });
+        } else {
+            const allChecked = items
+                .filter((item) => item.checked)
+                .map((item) => item.value)
+                .join("\n");
+            await fs.writeFile(FILE, allChecked, { encoding: "utf-8" });
+        }
         exit();
     });
 
-    return <Text color={color}>{textContent}</Text>;
+    useEvent("check", () => {
+        const copy = items.slice();
+        copy[index] = { ...item, checked: !item.checked };
+        setItems(copy);
+    });
+
+    const color = isFocus ? args.focusColor : args.blurColor;
+    const underline = isFocus
+        ? args.underlineFocusText
+        : args.underlineBlurText;
+    const dim = isFocus ? args.dimFocusText : args.dimBlurText;
+    const bold = isFocus ? args.boldFocusText : args.boldBlurText;
+    const italic = isFocus ? args.italicFocusText : args.italicBlurText;
+
+    let textContent = `${isFocus ? "> " : "  "}${item.value} ${item.checked ? "✔" : " "}`;
+    if (args.indent && !args.indentBorder) {
+        textContent = `${" ".repeat(args.indent)}${textContent}`;
+    }
+
+    return (
+        <Text
+            color={color}
+            underline={underline}
+            dimColor={dim}
+            bold={bold}
+            italic={italic}
+        >
+            {textContent}
+        </Text>
+    );
 }

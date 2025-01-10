@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
-echo "Select a music dir"
+# echo "Select a music dir"
 
-dirs=()
-for path in $HOME/Music/*; do
-    dirs+=$(basename "$path ");
-done
-
-selection=$(js-select $dirs --color=red --border)
-
-echo "You have selected album: $selection"
-
+# dirs=()
+# for path in $HOME/Music/*; do
+#     dirs+=$(basename "$path ");
+# done
+#
+# selection=$(js-select $dirs --color=red --border)
+#
+# echo "You have selected album: $selection"
+#
 a="A Blaze In The Northern Sky"
 b="Soulside Journey"
 c="Transilvanian Hunger"
@@ -39,10 +39,9 @@ selection=$(js-select \
         "Old Star" \
         "Eternal Hails......" \
         "Astral Fortress" \
-        "--color=red" \
-        "--selected-name" \
-        "$c" \
-        "--border" \
+        "--focusColor=red" \
+        "--preSelectedName=$c" \
+        "--borderStyle=round" \
     )
 
 echo "You have selected: $selection"
@@ -56,8 +55,8 @@ if [[ "$selection" == "$a" ]]; then
             "Where Cold Winds Blow" \
             "Darkthrone 'A Blaze in the Northern Sky'" \
             "The Pagan Winter" \
-            "--color=green" \
-            "--border" \
+            "--focusColor=green" \
+            "--borderStyle=round" \
         )
     echo "You have selected: $song"
 fi

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 processID=$(echo $$)
-file="/tmp/js-select-$(echo $processID)"
+file="./selection-$(echo $processID)"
 
 FILE="$file" node ./dist/root.js "$@">/dev/tty
 
