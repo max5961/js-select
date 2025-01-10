@@ -4,14 +4,13 @@
 
 A menu making command-line utility designed to be a more practical and modern
 alternative to the built in *select* bash command.  Written in TypeScript with
-[tuir](https://github.com/max5961/tuir).  Since I'm not a sadist, it comes
-complete with zesty vim keybindings by default, so no forcing you to use the
-arrow keys.
+[tuir](https://github.com/max5961/tuir).  Comes with vi keybindings by default
+and allows for a reasonable amount of other customizations.
 
 ### Install
 
 ```sh
-sudo npm install -g @mmorrissey5961/js-select
+sudo npm install -g js-select
 ```
 
 ### Usage
@@ -47,8 +46,8 @@ echo "You have selected: $selection"
     - When **enter** is pressed, only the focused text is written to stdout.
 - **many**
     - When **spacebar** is pressed, the focused text is toggled as checked.
-      Toggle as many items as desired.  Then, when **enter** is pressed, all of the
-      checked items are written to stdout separated by **\n** chars.
+      Toggle as many items as desired.  Then, when **enter** is pressed, all of
+      the checked items are written to stdout separated by **\n** chars.
 
 ---
 

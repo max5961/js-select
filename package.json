@@ -1,16 +1,24 @@
 {
-    "name": "setupink",
+    "name": "js-select",
     "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "bin": "select.sh",
-    "scripts": {
-        "start": "tsc && ./select.sh foo bar baz foo2 bar2 baz2 foo3 bar3 baz3",
-        "deploy": "tsc && sudo cp ./select.sh /usr/local/bin/js-select"
+    "description": "Command-line utility to make menus.",
+    "license": "MIT",
+    "main": "dist/index.js",
+    "bin": "js-select.sh",
+    "repository": "max5961/js-select",
+    "author": {
+        "name": "Maxwell Morrissey",
+        "email": "mmorrissey92@proton.me",
+        "url": "https://github.com/max5961/js-select"
     },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
+    "scripts": {
+        "compile": "tsc"
+    },
+    "keywords": [
+        "menus",
+        "tui",
+        "react"
+    ],
     "dependencies": {
         "@types/react": "latest",
         "react": "latest",
