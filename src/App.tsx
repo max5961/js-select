@@ -4,6 +4,7 @@ import {
     KeyMap,
     List,
     preserveScreen,
+    setMouseReporting,
     Text,
     useApp,
     useKeymap,
@@ -17,6 +18,7 @@ import { randomUUID } from "node:crypto";
 
 if (args.viewport) {
     preserveScreen();
+    setMouseReporting(true);
 }
 
 const LIST = args._.map((arg) => {
@@ -69,6 +71,12 @@ export default function App(): React.ReactNode {
                     dimColor: args.dimProgress,
                     bold: args.boldProgress,
                 }}
+                onScrollDown={() => {
+                    control.scrollDown(5);
+                }}
+                onScrollUp={() => {
+                    control.scrollUp(5);
+                }}
             >
                 <List listView={listView} scrollbar={{ hide: true }}>
                     {items.map((item) => {
@@ -117,15 +125,15 @@ function Item({ startIndex }: Props): React.ReactNode {
         }
     }, []);
 
-    const keymap: KeyMap = {};
-    keymap["choose"] = { key: "return" };
-    if (args.selection === "many") {
-        keymap["check"] = { input: " " };
-    }
+    const { useEvent } = useKeymap({
+        choose: { key: "return" },
+        check: { input: " " },
+    });
 
-    const { useEvent } = useKeymap(keymap);
+    useEvent("choose", choose);
+    useEvent("check", check);
 
-    useEvent("choose", async () => {
+    async function choose(): Promise<void> {
         if (args.selection === "single") {
             await fs.writeFile(FILE, item.value, { encoding: "utf-8" });
         } else {
@@ -136,13 +144,15 @@ function Item({ startIndex }: Props): React.ReactNode {
             await fs.writeFile(FILE, allChecked, { encoding: "utf-8" });
         }
         exit();
-    });
+    }
 
-    useEvent("check", () => {
-        const copy = items.slice();
-        copy[index] = { ...item, checked: !item.checked };
-        setItems(copy);
-    });
+    function check(): void {
+        if (args.selection === "many") {
+            const copy = items.slice();
+            copy[index] = { ...item, checked: !item.checked };
+            setItems(copy);
+        }
+    }
 
     const color = isFocus ? args.focusColor : args.blurColor;
     const underline = isFocus
@@ -158,14 +168,16 @@ function Item({ startIndex }: Props): React.ReactNode {
     }
 
     return (
-        <Text
-            color={color}
-            underline={underline}
-            dimColor={dim}
-            bold={bold}
-            italic={italic}
-        >
-            {textContent}
-        </Text>
+        <Box width="100" onClick={choose} onRightClick={check}>
+            <Text
+                color={color}
+                underline={underline}
+                dimColor={dim}
+                bold={bold}
+                italic={italic}
+            >
+                {textContent}
+            </Text>
+        </Box>
     );
 }

@@ -44,7 +44,6 @@ export const args = yargs(hideBin(process.argv))
         alias: ["color"],
         default: "cyan",
         requiresArg: true,
-        // implies: ["section"], // require to be used with "section" flag
     })
     .option("blurColor", {
         describe: "Same as focusColor, but for non focused list items",
@@ -158,7 +157,7 @@ export const args = yargs(hideBin(process.argv))
     })
     .option("viewport", {
         describe:
-            "When the command runs, use the entire terminal screen for display",
+            "When the command runs, use the entire terminal screen for display. Also enables mouse scroll/click",
         type: "boolean",
         default: false,
         requiresArg: false,
