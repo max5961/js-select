@@ -84,7 +84,13 @@ export default function App(): React.ReactNode {
                     control.scrollUp(5);
                 }}
             >
-                <List listView={listView} scrollbar={{ hide: true }}>
+                <List
+                    listView={listView}
+                    scrollbar={{
+                        hide: !args.scrollbar,
+                        color: args.scrollbarColor,
+                    }}
+                >
                     {items.map((item) => {
                         return <Item key={item.id} startIndex={startIndex} />;
                     })}

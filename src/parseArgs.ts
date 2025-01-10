@@ -113,7 +113,7 @@ export const args = yargs(hideBin(process.argv))
         requiresArg: false,
     })
     .option("centerScroll", {
-        describe: "Keeps focus in center of list if possible",
+        describe: "Keeps focus in center of menu if possible",
         type: "boolean",
         default: true,
         requiresArg: false,
@@ -164,14 +164,15 @@ export const args = yargs(hideBin(process.argv))
         requiresArg: true,
     })
     .option("displayProgress", {
-        describe: "Display a '1/5' progress counter",
+        describe:
+            "Display a '1/5' style progress counter in the top left corner",
         type: "boolean",
         default: false,
         requiresArg: false,
     })
     .option("viewport", {
         describe:
-            "When the command runs, use the entire terminal screen for display. Also enables mouse scroll/click",
+            "Use the entire terminal screen for display. Also enables mouse scroll/click",
         type: "boolean",
         default: false,
         requiresArg: false,

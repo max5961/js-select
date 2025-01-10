@@ -10,7 +10,7 @@ and allows for a reasonable amount of other customizations.
 ### Install
 
 ```sh
-sudo npm install -g js-select
+sudo npm install -g @mmorrissey5961/js-select
 ```
 
 ### Usage

@@ -12,7 +12,8 @@
         "url": "https://github.com/max5961/js-select"
     },
     "scripts": {
-        "compile": "tsc"
+        "compile": "tsc",
+        "deploy": "tsc && sudo npm install -g"
     },
     "keywords": [
         "menus",
