@@ -7,6 +7,8 @@ type Args = {
     blurColor: string;
     preSelectedName: string;
     preSelectedIndex: number;
+    quitOnQ: boolean;
+    quitOnEsc: boolean;
     selection: "single" | "many";
     indent: number;
     indentBorder: boolean;
@@ -62,6 +64,18 @@ export const args = yargs(hideBin(process.argv))
             "Starts focus on this index and displays checkmark next to it",
         type: "number",
         requiresArg: true,
+    })
+    .option("quitOnQ", {
+        describe: "Exits the process when the 'q' key is pressed",
+        type: "boolean",
+        default: true,
+        requiresArg: false,
+    })
+    .option("quitOnEsc", {
+        describe: "Exits the process when the ESC key is pressed",
+        type: "boolean",
+        default: true,
+        requiresArg: false,
     })
     .option("selection", {
         describe:

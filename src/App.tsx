@@ -127,10 +127,18 @@ function Item({ startIndex }: Props): React.ReactNode {
     const { useEvent } = useKeymap({
         choose: { key: "return" },
         check: { input: " " },
+        quitOnQ: { input: "q" },
+        quitOnEsc: { key: "esc" },
     });
 
     useEvent("choose", choose);
     useEvent("check", check);
+    useEvent("quitOnQ", () => {
+        args.quitOnQ && exit();
+    });
+    useEvent("quitOnEsc", () => {
+        args.quitOnEsc && exit();
+    });
 
     async function choose(): Promise<void> {
         if (args.selection === "single") {

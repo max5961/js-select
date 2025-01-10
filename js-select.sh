@@ -10,5 +10,5 @@ exitStatus="$?"
 if [[ -f "$file" ]]; then
     cat "$file" && rm "$file" && exit "$exitStatus"
 else
-    echo "" && exit 1
+    exit 1
 fi
