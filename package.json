@@ -1,6 +1,6 @@
 {
     "name": "@mmorrissey5961/js-select",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Command-line utility to make menus.",
     "license": "MIT",
     "main": "dist/index.js",
@@ -21,18 +21,19 @@
         "react"
     ],
     "dependencies": {
-        "@types/react": "latest",
-        "react": "latest",
-        "tuir": "latest",
+        "@types/react": "^19.0.4",
+        "react": "^19.0.0",
+        "tuir": "^1.0.1",
         "yargs": "^17.7.2"
     },
     "devDependencies": {
-        "@babel/preset-env": "latest",
-        "@babel/preset-typescript": "latest",
-        "@types/node": "latest",
+        "@babel/preset-env": "^7.26.0",
+        "@babel/preset-typescript": "^7.26.0",
+        "@types/node": "^22.10.5",
         "@types/yargs": "^17.0.33",
-        "prettier": "latest",
-        "typescript": "latest"
+        "prettier": "^3.4.2",
+        "typescript": "^5.7.3"
     },
     "type": "module"
 }
+
