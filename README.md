@@ -43,7 +43,7 @@ selection=$(js-select $(pwd)/* \
         "--dimBlurText" \
         "--borderStyle=round" \
         "--displayProgress" \
-        "--indentBorder"
+        "--indent"
 )
 
 [[ -d "$selection" ]] && cd "$selection"
@@ -79,10 +79,11 @@ echo "You have selected: $selection"
 
 #### Pre-selecting Items
 
-In the event that you want your menu to convey that one or more of the menu
-items has some special meaning.  For example, you want to make a script that
-changes a setting, it would also be nice to see what setting you had previously.
-These flags put a `✔` next to all pre-selected item.
+In the event you want your menu to convey that one or more of the menu items has
+some special meaning.  For example, if you were creating a script that changes a
+setting it would be nice to see what setting you had previously. The
+`--preSelectedNames` and `--preSelectedIndexes` flags put a `✔` next to all
+pre-selected items.
 
 The initial focus of the menu will also be the first item in the pre-selected
 array.
@@ -106,7 +107,7 @@ selection=$(js-select a b c d --preSelectedIndexes 2 3 --selection=many)
 - Focus and blur color can be set with the `--focusColor` and `--blurColor` flags.
 - The size of the viewing window can be set with the `--windowSize` and
   `--maximumWindow` flags.  By default the windowSize is set to `7`. The
-  --maximumWindow flag sets the window to the maximum amount of terminal rows
+  `--maximumWindow` flag sets the window to the maximum amount of terminal rows
   available.
 - Navigation keybindings can be set with the `--navigation` to either `vi` or
   `arrow`.
@@ -116,6 +117,7 @@ selection=$(js-select a b c d --preSelectedIndexes 2 3 --selection=many)
 - Scrollbar can be set with `--scrollbar` and its color set with
   `--scrollbarColor`
 - Wipe the entire screen to display the menu with `--viewport`
+- Indent the menu with `--indent` which defaults to 4 spaces
 - Further style with:
     - `--underlineFocusText`
     - `--underlineBlurText`

@@ -14,7 +14,6 @@ type Args = {
     windowSize: number;
     maximumWindow: boolean;
     indent: number;
-    indentBorder: boolean;
     centerScroll: boolean;
     fallthrough: boolean;
     scrollbar: boolean;
@@ -88,16 +87,9 @@ export const args = yargs(hideBin(process.argv))
         requiresArg: true,
     })
     .option("indent", {
-        describe: "How many spaces to indent list items",
+        describe: "How many spaces to indent the menu",
         type: "number",
         default: 4,
-        requiresArg: true,
-    })
-    .option("indentBorder", {
-        describe:
-            "When there is both an indent and a border, is the text indented or is the box indented?",
-        type: "boolean",
-        default: false,
         requiresArg: false,
     })
     .option("windowSize", {

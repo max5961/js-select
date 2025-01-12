@@ -75,7 +75,7 @@ export default function App(): React.ReactNode {
     }
 
     const content = (
-        <Box marginLeft={args.indentBorder ? args.indent : 0}>
+        <Box marginLeft={args.indent}>
             <Box
                 height={height}
                 borderStyle={args.borderStyle}
@@ -198,9 +198,6 @@ function Item({ startIndex }: Props): React.ReactNode {
     const italic = isFocus ? args.italicFocusText : args.italicBlurText;
 
     let textContent = `${isFocus ? "> " : "  "}${item.value} ${item.checked ? "✔" : " "}`;
-    if (args.indent && !args.indentBorder) {
-        textContent = `${" ".repeat(args.indent)}${textContent}`;
-    }
 
     return (
         <Box width="100" onClick={choose} onRightClick={check}>
