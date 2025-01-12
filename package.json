@@ -1,6 +1,6 @@
 {
     "name": "@mmorrissey5961/js-select",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "description": "Command-line utility to make menus.",
     "license": "MIT",
     "main": "dist/index.js",
@@ -21,9 +21,9 @@
         "react"
     ],
     "dependencies": {
-        "react": "latest",
+        "react": "^18.3.1",
         "tuir": "^1.0.1",
-        "yargs": "latest"
+        "yargs": "^17.7.2"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.26.0",
