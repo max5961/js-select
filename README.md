@@ -1,17 +1,17 @@
-### js-select
+- _**js-select** is a menu making command-line utility that can be used as an
+alternative to the builtin *select* command in bash.  It comes with vim
+keybindings by default and allows for a reasonable amount of functionality and
+styling customizations._
+- _Written in TypeScript with
+[tuir](https://github.com/max5961/tuir)._
 
----
-
-A menu making command-line utility designed to be a more practical and modern
-alternative to the built in *select* bash command.  Written in TypeScript with
-[tuir](https://github.com/max5961/tuir).  Comes with vi keybindings by default
-and allows for a reasonable amount of other customizations.
-
+# js-select
 <!-- demo -->
 https://github.com/user-attachments/assets/3d6d632c-b947-4d5a-b1bf-03df6d668009
 
+---
 
-### Install
+## Install
 
 ```sh
 sudo npm install -g @mmorrissey5961/js-select
@@ -22,65 +22,123 @@ git clone https://github.com/max5961/js-select
 cd js-select && npm install && npm run deploy
 ```
 
-### Usage
+---
+
+#### Command line options
 ```
 js-select --help
 ```
 
-### Example
-```
-echo "Select a Darkthrone album:"
+---
 
-selection=$(js-select \
-        "Soulside Journey" \
-        "A Blaze In The Northern Sky" \
-        "Under a Funeral Moon" \
-        "Transilvanian Hunger" \
-        "Astral Fortress" \
+#### Example
+
+```sh
+echo "Select a directory to cd into:"
+
+selection=$(js-select $(pwd)/* \
         "--focusColor=red" \
-        "--preSelectedName='Under a Funeral Moon'" \
+        "--underlineFocusText" \
+        "--blurColor=red" \
+        "--dimBlurText" \
         "--borderStyle=round" \
         "--displayProgress" \
         "--indentBorder"
 )
 
-echo "You have selected: $selection"
+[[ -d "$selection" ]] && cd "$selection"
 ```
 
 ---
 
-### --selection [string] [choices: "single", "many"] [default: "single"]
+#### Selecting One vs Many Menu items
 
-- **single**
-    - When **enter** is pressed, only the focused text is written to stdout.
-- **many**
-    - When **spacebar** is pressed, the focused text is toggled as checked.
-      Toggle as many items as desired.  Then, when **enter** is pressed, all of
-      the checked items are written to stdout separated by **\n** chars.
+- When set to `single`, pressing enter on the focused item will print just that
+  item to stdout.
+- When set to `many`, pressing space on the focused item toggles it as checked
+  or not.  Pressing enter prints out all of the checked items separated by new
+  lines charachters.
+- default: `single`
+
+```sh
+echo "Select a single option:"
+
+selection=$(js-select a b c d --selection=single)
+
+echo "You have selected: $selection"
+```
+
+```sh
+echo "Select options:"
+
+selection=$(js-select a b c d --selection=many)
+
+echo "You have selected: $selection"
+```
+---
+
+#### Pre-selecting Items
+
+In the event that you want your menu to convey that one or more of the menu
+items has some special meaning.  For example, you want to make a script that
+changes a setting, it would also be nice to see what setting you had previously.
+These flags put a `✔` next to all pre-selected item.
+
+The initial focus of the menu will also be the first item in the pre-selected
+array.
+
+_Both examples pre-select **c** and **d**._
+
+```sh
+selection=$(js-select a b c d --preSelectedNames c d --selection=many)
+```
+
+```sh
+selection=$(js-select a b c d --preSelectedIndexes 2 3 --selection=many)
+```
 
 ---
 
-### Pre-selecting an item (--preSelectedName, --preSelectedIndex)
+#### Style and Function Options
 
-In the event that you want your menu to convey that one of the menu items has
-some special meaning.  For example, you want to make a script that changes a
-setting, it would also be nice to see what setting you had previously.  These
-flags put a checkmark next to the pre-selected item and shift the initial focus
-to that item.
+`NOTE:` All color options can be set to a string (i.e `blue`) or a `HEX` color.
 
-- **--preSelectedName** [string]
-- **--preSelectedIndex** [number]
+- Focus and blur color can be set with the `--focusColor` and `--blurColor` flags.
+- The size of the viewing window can be set with the `--windowSize` and
+  `--maximumWindow` flags.  By default the windowSize is set to `7`. The
+  --maximumWindow flag sets the window to the maximum amount of terminal rows
+  available.
+- Navigation keybindings can be set with the `--navigation` to either `vi` or
+  `arrow`.
+- Exit keybinds can be set with `--quitOnQ` and `--quitOnEsc`.  Both are true by
+  default
+- Scrolling behavior can be set with `--centerScroll` and `--fallthrough`
+- Scrollbar can be set with `--scrollbar` and its color set with
+  `--scrollbarColor`
+- Wipe the entire screen to display the menu with `--viewport`
+- Further style with:
+    - `--underlineFocusText`
+    - `--underlineBlurText`
+    - `--italicFocusText`
+    - `--italicBlurText`
+    - `--dimFocusText`
+    - `--dimBlurText`
+    - `--boldFocusText`
+    - `--boldBlurText`
+    - `--italicProgress`
+    - `--dimProgress`
+    - `--boldProgress`
+    - `--progressColor`
+
 
 ---
+#### Error handling
 
-### Error handling
-
-Especially if your script contains multiple menus, it would be advisable to
+Especially if your script contains multiple menus, it might be advisable to
 check for captured output with something like this:
 
 ```sh
 [[ ! "$selection" ]] && exit 1
-
 ```
 
 If the user sends a SIGINT during a menu, this ensures your script doesn't

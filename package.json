@@ -21,19 +21,19 @@
         "react"
     ],
     "dependencies": {
-        "@types/react": "^19.0.4",
-        "react": "^19.0.0",
+        "react": "latest",
         "tuir": "^1.0.1",
-        "yargs": "^17.7.2"
+        "yargs": "latest"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.26.0",
         "@babel/preset-typescript": "^7.26.0",
         "@types/node": "^22.10.5",
+        "@types/react": "^19.0.4",
         "@types/yargs": "^17.0.33",
+        "dedupe": "^4.0.3",
         "prettier": "^3.4.2",
         "typescript": "^5.7.3"
     },
     "type": "module"
 }
-

@@ -3,20 +3,20 @@ import { hideBin } from "yargs/helpers";
 import { Styles } from "tuir";
 
 type Args = {
-    focusColor: string;
-    blurColor: string;
-    preSelectedName: string;
-    preSelectedIndex: number;
+    selection: "single" | "many";
+    preSelectedNames: string[];
+    preSelectedIndexes: number[];
+    navigation: "vi" | "arrow";
     quitOnQ: boolean;
     quitOnEsc: boolean;
-    selection: "single" | "many";
-    indent: number;
-    indentBorder: boolean;
+    focusColor: string;
+    blurColor: string;
     windowSize: number;
     maximumWindow: boolean;
+    indent: number;
+    indentBorder: boolean;
     centerScroll: boolean;
     fallthrough: boolean;
-    navigation: "vi" | "arrow";
     scrollbar: boolean;
     scrollbarColor: string;
     viewport: boolean;
@@ -53,16 +53,18 @@ export const args = yargs(hideBin(process.argv))
         default: "",
         requiresArg: true,
     })
-    .option("preSelectedName", {
+    .option("preSelectedNames", {
         describe:
-            "Starts focus on this item and displays a checkmark next to it",
+            "Starts focus on the first selected and displays a checkmark next to all selected",
         type: "string",
+        array: true,
         requiresArg: true,
     })
-    .option("preSelectedIndex", {
+    .option("preSelectedIndexes", {
         describe:
-            "Starts focus on this index and displays checkmark next to it",
+            "Starts focus on the first selected and displays checkmark next to all selected",
         type: "number",
+        array: true,
         requiresArg: true,
     })
     .option("quitOnQ", {

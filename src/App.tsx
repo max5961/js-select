@@ -15,8 +15,15 @@ import fs from "node:fs/promises";
 import { args } from "./parseArgs.js";
 import { randomUUID } from "node:crypto";
 
-const LIST = args._.map((arg) => {
-    return { id: randomUUID(), value: arg, checked: false };
+args.preSelectedNames = args.preSelectedNames ?? [];
+args.preSelectedIndexes = args.preSelectedIndexes ?? [];
+
+const LIST = args._.map((arg, idx) => {
+    const isChecked =
+        args.preSelectedIndexes.includes(idx) ||
+        args.preSelectedNames.includes(arg);
+
+    return { id: randomUUID(), value: arg, checked: isChecked };
 });
 const FILE = process.env.FILE!;
 
@@ -35,9 +42,12 @@ if (
 export default function App(): React.ReactNode {
     // Get start index
     const startIndex = useMemo<number>(() => {
-        if (args.preSelectedIndex !== undefined) return args.preSelectedIndex;
-        if (args.preSelectedName) {
-            return LIST.findIndex((arg) => arg.value === args.preSelectedName);
+        if (args.preSelectedIndexes[0] !== undefined)
+            return args.preSelectedIndexes[0];
+        if (args.preSelectedNames[0]) {
+            return LIST.findIndex(
+                (arg) => arg.value === args.preSelectedNames[0],
+            );
         }
         return 0;
     }, []);
@@ -128,11 +138,16 @@ function Item({ startIndex }: Props): React.ReactNode {
         useListItem<typeof LIST>();
 
     useEffect(() => {
-        if (args.preSelectedName || args.preSelectedIndex !== undefined) {
-            if (startIndex === index) {
-                const copy = items.slice();
-                copy[index] = { ...item, checked: true };
-                setItems(copy);
+        if (args.preSelectedNames.length || args.preSelectedIndexes.length) {
+            const copy = items.slice();
+            copy[index] = { ...item, checked: true };
+
+            if (
+                startIndex === index ||
+                args.preSelectedNames.includes(item.value) ||
+                args.preSelectedIndexes.includes(index)
+            ) {
+                return setItems((_) => copy);
             }
         }
     }, []);
